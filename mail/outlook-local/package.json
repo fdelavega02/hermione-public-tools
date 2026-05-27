@@ -1,0 +1,16 @@
+{
+  "name": "outlook-local-starter",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Local Outlook Web automation starter using a one-time manual browser login and saved local storage state.",
+  "scripts": {
+    "auth": "node auth.mjs",
+    "sync": "node sync-inbox.mjs",
+    "check-alerts": "node check-alerts.mjs",
+    "draft": "node reply-draft.mjs"
+  },
+  "dependencies": {
+    "playwright": "^1.54.0"
+  }
+}

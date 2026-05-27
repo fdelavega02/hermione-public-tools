@@ -1,0 +1,47 @@
+{
+  "loginUrl": "https://outlook.office.com/mail/",
+  "inboxUrl": "https://outlook.office.com/mail/",
+  "statePath": "./state/storage-state.json",
+  "alertStatePath": "./state/alert-state.json",
+  "outputDir": "./output",
+  "headless": true,
+  "captureHtml": true,
+  "captureScreenshots": true,
+  "defaultTimeoutMs": 45000,
+  "viewport": {
+    "width": 1440,
+    "height": 1100
+  },
+  "maxInboxItems": 15,
+  "replyStyleDefaults": {
+    "tone": "professional",
+    "length": "short",
+    "signature": "Francisco"
+  },
+  "ignoreRules": {
+    "subjectIncludes": [],
+    "fromIncludes": [],
+    "previewIncludes": []
+  },
+  "alertRules": {
+    "timeZone": "America/Indianapolis",
+    "weekdays": ["Mon", "Tue", "Wed", "Thu", "Fri"],
+    "startHour": 7,
+    "startMinute": 0,
+    "endHour": 16,
+    "endMinute": 0,
+    "subjectIncludes": ["IT", "issue", "request", "printer", "radio", "excel", "powerpoint", "word", "outlook", "laptop", "pc", "problem", "plex"],
+    "senderIncludes": ["Hogle, Karenah", "Hartbarger, Kyle", "Vendal, John", "AAM IT Service Desk"]
+  },
+  "selectors": {
+    "postLoginReady": "#MailList, [role='main'], [aria-label='Message list'], div[aria-label*='Inbox']",
+    "inboxReady": "#MailList [role='listbox'][aria-label*='Message list'], #MailList, [role='main']",
+    "messageList": "#MailList [role='listbox'][aria-label*='Message list']",
+    "messageRow": "#MailList [role='listbox'][aria-label*='Message list'] [role='option'][data-convid][data-focusable-row='true']",
+    "subject": "span",
+    "from": "span",
+    "preview": "",
+    "time": "time, [data-testid='message-list-item-received-time']",
+    "unreadIndicator": "[aria-label*='Unread'], [title='Unread']"
+  }
+}
