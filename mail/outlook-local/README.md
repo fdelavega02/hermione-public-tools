@@ -1,6 +1,6 @@
 # Outlook Local Automation Starter
 
-This is a local-only starter for Francisco's Outlook Web workflow:
+This is a local-only starter for Francisco's Outlook Web process:
 
 1. Sign in manually in a real local browser window once.
 2. Reuse the locally saved browser session to detect inbox emails.
@@ -33,7 +33,7 @@ This is a local-only starter for Francisco's Outlook Web workflow:
 2. Change into this project:
 
 ```bash
-cd /home/fdelavega02/.openclaw/workspace/mail/outlook-local
+cd mail/outlook-local
 ```
 
 3. Install dependencies:
@@ -51,7 +51,7 @@ cp config.example.json config.json
 On Windows PowerShell:
 
 ```powershell
-Copy-Item \\wsl.localhost\Ubuntu\home\mfour\.openclaw\workspace\mail\outlook-local\config.example.json \\wsl.localhost\Ubuntu\home\mfour\.openclaw\workspace\mail\outlook-local\config.json
+Copy-Item .\config.example.json .\config.json
 ```
 
 5. Edit `config.json` if your Outlook tenant needs different URLs or selector tweaks.
@@ -88,12 +88,12 @@ Outputs are written to `output/inbox/`:
 
 `npm run sync` still extracts message-list data only. Full-body fetching is reserved for the alert checker so the inbox detection path stays stable.
 
-If you want to suppress recurring noise, use `ignoreRules` in `config.json`, for example:
+If you want to suppress recurring noise, use local ignore rules in `config.json`, for example:
 
 ```json
 "ignoreRules": {
-  "subjectIncludes": ["Preferred Suppliers", "TISAX Certification"],
-  "fromIncludes": [],
+  "subjectIncludes": ["Routine notice", "Automated reminder"],
+  "fromIncludes": ["no-reply@example.com"],
   "previewIncludes": []
 }
 ```
@@ -106,16 +106,16 @@ Run:
 npm run check-alerts
 ```
 
-This script only does real work Monday through Friday, 7:00 AM through 4:00 PM America/Indianapolis time. Outside that window it exits with exactly `NO_REPLY` and skips the inbox sync.
+This script only runs during the configured local alert window. Outside that window it exits with exactly `NO_REPLY` and skips the inbox sync.
 
 When it does run, it syncs the inbox first, then compares the latest filtered inbox snapshot against local alert state in `state/alert-state.json`.
 
 Alert rules:
 
 - only unread emails are considered
-- subject must include one of: `IT`, `issue`, `request`, `printer`, `radio`, `excel`, `powerpoint`, `word`, `outlook`
-- or the sender must be `Hogle, Karenah`
-- recurring noise like `Preferred Suppliers` and `TISAX Certification` is still ignored by the inbox sync layer
+- subject, sender, or preview filters can be configured locally
+- recurring low-priority messages can be ignored through local config
+- public docs intentionally avoid listing private filter terms, names, organizations, or operational details
 
 Behavior:
 
@@ -125,9 +125,9 @@ Behavior:
 - Matching unread emails continue to alert on later checks until they are no longer unread
 - Repeated identical check failures are suppressed after the first failure alert so a broken login or selector does not spam the same error every few minutes
 
-The detection path honors `ignoreRules` because it reads from the same synced inbox snapshot that `npm run sync` writes after filtering.
+The detection path honors local ignore rules because it reads from the same synced inbox snapshot that `npm run sync` writes after filtering.
 
-## Reply draft workflow
+## Reply draft process
 
 After a sync, choose a reply ID from `output/inbox/latest.md` or `output/inbox/latest.json`.
 

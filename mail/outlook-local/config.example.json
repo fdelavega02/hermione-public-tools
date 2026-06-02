@@ -25,13 +25,23 @@
   },
   "alertRules": {
     "timeZone": "America/Indianapolis",
-    "weekdays": ["Mon", "Tue", "Wed", "Thu", "Fri"],
+    "weekdays": [
+      "Mon",
+      "Tue",
+      "Wed",
+      "Thu",
+      "Fri"
+    ],
     "startHour": 7,
     "startMinute": 0,
     "endHour": 16,
     "endMinute": 0,
-    "subjectIncludes": ["IT", "issue", "request", "printer", "radio", "excel", "powerpoint", "word", "outlook", "laptop", "pc", "problem", "plex"],
-    "senderIncludes": ["Hogle, Karenah", "Hartbarger, Kyle", "Vendal, John", "AAM IT Service Desk"]
+    "subjectIncludes": [
+      "important",
+      "urgent",
+      "request"
+    ],
+    "senderIncludes": []
   },
   "selectors": {
     "postLoginReady": "#MailList, [role='main'], [aria-label='Message list'], div[aria-label*='Inbox']",

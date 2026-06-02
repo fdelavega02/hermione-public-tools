@@ -332,9 +332,6 @@ function buildReminderSummary(subject, bodyText) {
     return parts.join(" ");
   }
 
-  if (/\bplease take care of this\b/i.test(combined) && /\bmeter counts\b/i.test(combined)) {
-    return "Forwarded request to handle printer meter counts.";
-  }
 
   return "";
 }
@@ -352,39 +349,24 @@ function extractInlineField(text, label, stopLabels = []) {
   return compactWhitespace(match?.[1] || "");
 }
 
-function buildWorkRequestSummary(subject, bodyText) {
+function buildGenericRequestSummary(subject, bodyText) {
   const subjectText = compactWhitespace(subject);
   const body = compactWhitespace(bodyText);
   const combined = `${subjectText} ${body}`.trim();
-  if (!combined || !/\b(?:work request|plex request|new work request)\b/i.test(combined)) {
+  if (!combined || !/\b(?:service request|ticket|request created|new request)\b/i.test(combined)) {
     return "";
   }
 
-  const requestId = compactWhitespace(subjectText.match(/\b(W\d+)\b/i)?.[1] || body.match(/\b(W\d+)\b/i)?.[1] || "");
-  const dueDate = compactWhitespace(body.match(/\bdue\s+(\d{1,2}\/\d{1,2}\/\d{4})\b/i)?.[1] || "");
+  const requestId = compactWhitespace(subjectText.match(/\b(?:SR|REQ|TICKET)[- ]?\d+\b/i)?.[0] || body.match(/\b(?:SR|REQ|TICKET)[- ]?\d+\b/i)?.[0] || "");
+  const dueDate = compactWhitespace(body.match(/\bdue\s+(.+?)(?:\.|$)/i)?.[1] || "");
   const assignedTo = compactWhitespace(body.match(/\bassigned to\s+(.+?)(?:\.|$)/i)?.[1] || "");
-  const equipment = extractInlineField(body, "Equipment", ["Workcenter", "Description", "Equipment Group", "Location", "Requested By", "Requested For"]);
-  const workcenter = extractInlineField(body, "Workcenter", ["Description", "Equipment", "Equipment Group", "Location", "Requested By", "Requested For"]);
-  const description = extractInlineField(body, "Description", ["Workcenter", "Equipment", "Equipment Group", "Location", "Requested By", "Requested For"]);
 
   const parts = [
-    `${`Work request ${requestId || ""}`.trim()} was created${assignedTo ? ` and assigned to ${assignedTo}` : ""}.`
+    `${requestId ? `Request ${requestId}` : "A request"} was created${assignedTo ? ` and assigned to ${assignedTo}` : ""}.`
   ];
 
   if (dueDate) {
     parts.push(`It is due ${dueDate}.`);
-  }
-
-  if (workcenter && workcenter.length >= 4) {
-    parts.push(`Workcenter: ${workcenter}.`);
-  }
-
-  if (equipment && equipment.length >= 4) {
-    parts.push(`Equipment: ${equipment}.`);
-  }
-
-  if (description && description.length >= 10) {
-    parts.push(`Description: ${description}.`);
   }
 
   return parts.join(" ");
@@ -549,7 +531,7 @@ function squashRunOn(text, maxLength) {
 
   const focusPatterns = [
     /\b(?:issue|problem|request|need|needs|needed|cannot|can't|unable|not able|trying|tried)\b[^.!?;]{0,180}/gi,
-    /\b(?:version|mismatch|error|install|download|access|flash|laptop|printer|outlook|excel|radio)\b[^.!?;]{0,180}/gi
+    /\b(?:version|mismatch|error|install|download|access|unable|failed)\b[^.!?;]{0,180}/gi
   ];
 
   const snippets = [];
@@ -591,9 +573,9 @@ export function summarizePreviewText(subject, previewText, maxLength = 220) {
     return truncate(ticketSummary, maxLength);
   }
 
-  const workRequestSummary = buildWorkRequestSummary(subject, preview);
-  if (workRequestSummary) {
-    return truncate(workRequestSummary, maxLength);
+  const genericRequestSummary = buildGenericRequestSummary(subject, preview);
+  if (genericRequestSummary) {
+    return truncate(genericRequestSummary, maxLength);
   }
 
   const outOfOfficeSummary = buildOutOfOfficeSummary(subject, preview);
@@ -651,9 +633,9 @@ function summarizeBodyText(subject, bodyText, previewText, maxLength = 220) {
     return truncate(ticketSummary, maxLength);
   }
 
-  const workRequestSummary = buildWorkRequestSummary(subject, content);
-  if (workRequestSummary) {
-    return truncate(workRequestSummary, maxLength);
+  const genericRequestSummary = buildGenericRequestSummary(subject, content);
+  if (genericRequestSummary) {
+    return truncate(genericRequestSummary, maxLength);
   }
 
   const outOfOfficeSummary = buildOutOfOfficeSummary(subject, content);

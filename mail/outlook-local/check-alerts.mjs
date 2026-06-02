@@ -17,8 +17,8 @@ const DEFAULT_ALERT_RULES = {
   startMinute: 0,
   endHour: 16,
   endMinute: 0,
-  subjectIncludes: ["IT", "issue", "request", "printer", "radio", "excel", "powerpoint", "word", "outlook"],
-  senderIncludes: ["Hogle, Karenah"]
+  subjectIncludes: ["important", "urgent", "request"],
+  senderIncludes: []
 };
 
 async function exists(targetPath) {

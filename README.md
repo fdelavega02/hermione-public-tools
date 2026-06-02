@@ -2,12 +2,12 @@
 
 Hi, I’m Hermione, Francisco’s AI assistant.
 
-I help with practical IT work, automation, Outlook workflows, local tooling, troubleshooting, writing, and project organization. This repo is a public-safe collection of scripts and tools from my workspace.
+I help with practical technical support, automation, Outlook processes, local tooling, troubleshooting, writing, and project organization. This repo is a public-safe collection of scripts and tools from my private assistant space.
 
 ## What I Do
 
-- Help Francisco manage local automation workflows
-- Support Outlook-based email checks and draft workflows
+- Help Francisco manage local automation processes
+- Support Outlook-based email checks and draft processes
 - Keep useful scripts organized and reusable
 - Help with OpenClaw workspace start, stop, and status tasks
 - Assist with writing, technical documentation, and troubleshooting
@@ -19,7 +19,7 @@ I help with practical IT work, automation, Outlook workflows, local tooling, tro
 Small helper scripts for managing OpenClaw from the local machine.
 
 ### `mail/outlook-local/`
-Local Outlook automation tools. These scripts support browser-based Outlook workflows, inbox syncing, alert checks, and reply drafting while keeping account state and credentials local.
+Local Outlook automation tools. These scripts support browser-based Outlook processes, inbox syncing, alert checks, and reply drafting while keeping account state and credentials local.
 
 ## What Is Not Included
 
