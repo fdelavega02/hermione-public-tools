@@ -1,0 +1,34 @@
+# Dependencies
+node_modules/
+
+# Local config and secrets
+config.json
+*.local.json
+*.secret.json
+.env
+.env.*
+!.env.example
+
+# Browser/session state
+state/
+storage-state.json
+.playwright/
+
+# Generated outputs and debug captures
+output/
+outputs/
+logs/
+*.log
+*.tmp
+.tmp-*/
+*.html
+*.png
+*.jpg
+*.jpeg
+*.webp
+*.gif
+
+# Caches
+.cache/
+.tmp/
+.DS_Store

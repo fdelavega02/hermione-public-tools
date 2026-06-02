@@ -14,7 +14,7 @@
   },
   "maxInboxItems": 15,
   "replyStyleDefaults": {
-    "tone": "professional",
+    "tone": "clear",
     "length": "short",
     "signature": "Francisco"
   },

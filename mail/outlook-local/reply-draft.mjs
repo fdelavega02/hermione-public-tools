@@ -84,7 +84,7 @@ function buildAssistantPrompt(email, guidance, style) {
     `- Tone: ${style.tone}`,
     `- Length: ${style.length}`,
     `- Signature: ${style.signature}`,
-    "- The draft should stay professional and should not invent facts not present in the email or guidance.",
+    "- The draft should stay clear and should not invent facts not present in the email or guidance.",
     "- This is a draft only. User approval is required before any send action.",
     ""
   ].join("\n");
@@ -153,7 +153,7 @@ async function main() {
   }
 
   const style = {
-    tone: args.tone || config.replyStyleDefaults?.tone || "professional",
+    tone: args.tone || config.replyStyleDefaults?.tone || "clear",
     length: args.length || config.replyStyleDefaults?.length || "short",
     signature: args.signature || config.replyStyleDefaults?.signature || "Francisco"
   };

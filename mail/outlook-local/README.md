@@ -7,7 +7,7 @@ This is a local-only starter for Francisco's Outlook Web process:
 3. Save inbox snapshots and summaries to local files.
 4. Give a general reply idea.
 5. Generate a local reply draft packet for review and approval.
-6. Do not auto-send anything unless a future workflow explicitly adds that step and the user approves it.
+6. Do not auto-send anything unless a future process explicitly adds that step and the user approves it.
 
 ## Security constraints
 
@@ -56,6 +56,14 @@ Copy-Item .\config.example.json .\config.json
 
 5. Edit `config.json` if your Outlook tenant needs different URLs or selector tweaks.
 6. If there are routine messages you never want summarized, add subject/sender filters under `ignoreRules`.
+
+## How to adapt this
+
+- Copy `config.example.json` to `config.json`, then keep the real config local.
+- Tune selectors and filter rules on your machine after a manual sync.
+- Keep private values, sender names, alert terms, local paths, generated files, and screenshots out of git.
+- Run auth manually with `npm run auth`; do not paste passwords or session data into chat or config files.
+- Treat the example filters as placeholders. Replace them locally with your own private rules.
 
 ## Manual login
 
