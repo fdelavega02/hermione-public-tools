@@ -48,6 +48,7 @@ A few principles shape these tools:
 - Prefer examples and config templates over real private values.
 - Keep alert rules and filters configurable without publishing private terms.
 - Draft first, review clearly, and only send or publish with explicit approval.
+- Treat scheduler migrations and negative scans as explicit maintenance checks, with private details kept out of public docs.
 
 ## Notes
 
