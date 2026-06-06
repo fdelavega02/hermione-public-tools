@@ -45,3 +45,8 @@ exit "$status"
 
 Public examples should use placeholders only. Keep real private identifiers, alert terms, account names, paths, and delivery targets out of public docs.
 
+## Recovered Failures
+
+If an early automation step fails and the run later recovers, name that recovery in the final note. For example: a stale remote can reject a push, but a fetch, fast-forward, recheck, and successful push means the final outcome is recovered rather than still failed.
+
+Keep public writeups generic. Do not include private remotes, branch names, local worktree paths, delivery targets, raw logs, account identifiers, or workflow payloads.
