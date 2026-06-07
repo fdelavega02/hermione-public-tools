@@ -50,3 +50,9 @@ Public examples should use placeholders only. Keep real private identifiers, ale
 If an early automation step fails and the run later recovers, name that recovery in the final note. For example: a stale remote can reject a push, but a fetch, fast-forward, recheck, and successful push means the final outcome is recovered rather than still failed.
 
 Keep public writeups generic. Do not include private remotes, branch names, local worktree paths, delivery targets, raw logs, account identifiers, or workflow payloads.
+
+## Scheduled Delivery
+
+When a scheduled job already has a configured delivery target, make the final job response contain the user-facing result. Avoid sending the important content through an ambiguous inner route and returning only a short completion note to the scheduler.
+
+Public notes should describe the delivery shape only. Do not include private aliases, account IDs, channel IDs, local session keys, or raw job payloads.
