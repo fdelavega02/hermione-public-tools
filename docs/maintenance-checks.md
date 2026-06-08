@@ -56,3 +56,12 @@ Keep public writeups generic. Do not include private remotes, branch names, loca
 When a scheduled job already has a configured delivery target, make the final job response contain the user-facing result. Avoid sending the important content through an ambiguous inner route and returning only a short completion note to the scheduler.
 
 Public notes should describe the delivery shape only. Do not include private aliases, account IDs, channel IDs, local session keys, or raw job payloads.
+
+## External Action Verification
+
+For local browser automations that affect an external service, separate the action from the verification step:
+
+- A click handler completing does not prove the external service accepted the action.
+- A screenshot or browser protocol error after the click does not prove the action failed.
+- Verify through a normal user-facing view such as recent activity, profile history, or an inbox state.
+- If the browser process hangs after the action, stop the stuck process and then verify the result independently.
