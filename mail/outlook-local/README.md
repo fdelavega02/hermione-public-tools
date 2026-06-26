@@ -75,7 +75,17 @@ npm run auth
 
 That opens a real Chromium window locally. Sign in there, complete MFA there, wait until the mailbox is visible, then return to the terminal and press Enter to save local session state.
 
-If the saved session expires later, rerun `npm run auth`.
+If you already have saved local state, the login browser reuses it so Outlook can refresh the session instead of always starting from a blank browser profile.
+
+For scheduled or recovery workflows where Outlook should save automatically after the mailbox becomes visible, run:
+
+```bash
+npm run auth -- --auto-save
+```
+
+Auto-save waits for `selectors.postLoginReady`, confirms the page is an Outlook Mail page, then writes the refreshed local storage state. Tune `authAutoSaveTimeoutMs` in `config.json` if your tenant or MFA flow needs longer.
+
+If the saved session expires later, rerun `npm run auth`. Keep storage state, auth metadata, screenshots, and account-specific recovery notes local only.
 
 ## Inbox sync
 
@@ -131,7 +141,7 @@ Behavior:
 - Runs with one or more alertable unread emails: reuses the saved authenticated Outlook browser session, matches the synced inbox rows against Outlook's internal inbox API, fetches the normalized message body with Outlook's own `FindItem` and `GetItem` service calls, reads the full email content, and prints a short plain-text summary instead of dumping the raw body into the alert
 - If that safer Outlook-internal fetch path is unavailable, it still summarizes the inbox preview into a short human line and does not click the reading pane by default
 - Matching unread emails continue to alert on later checks until they are no longer unread
-- Repeated identical check failures are suppressed after the first failure alert so a broken login or selector does not spam the same error every few minutes
+- Repeated identical check failures are suppressed after the first failure alert, then resurfaced at most once every 24 hours while the same failure persists so a broken login or selector does not go silent forever
 
 The detection path honors local ignore rules because it reads from the same synced inbox snapshot that `npm run sync` writes after filtering.
 

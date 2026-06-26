@@ -10,6 +10,7 @@ const CONFIG_PATH = path.join(__dirname, "config.json");
 const DEFAULT_ALERT_STATE_PATH = "./state/alert-state.json";
 const MAX_STORED_KEYS = 250;
 const MAX_ALERT_ITEMS = 5;
+const REPEATED_ERROR_ALERT_INTERVAL_MS = 24 * 60 * 60 * 1000;
 const DEFAULT_ALERT_RULES = {
   timeZone: "America/Indianapolis",
   weekdays: ["Mon", "Tue", "Wed", "Thu", "Fri"],
@@ -258,6 +259,7 @@ export async function main() {
       lastCheckedAt: new Date().toISOString(),
       lastSyncedAt: report.syncedAt,
       lastError: null,
+      lastErrorNotifiedAt: null,
       seenKeys: currentKeys.slice(0, MAX_STORED_KEYS)
     });
 
@@ -272,18 +274,26 @@ export async function main() {
     const message = compactWhitespace(error?.message || error);
     const errorFingerprint = message.toLowerCase();
     const lastErrorFingerprint = compactWhitespace(previousState?.lastError).toLowerCase();
+    const now = new Date();
+    const lastErrorNotifiedAt = Date.parse(previousState?.lastErrorNotifiedAt || "");
+    const recentlyNotified =
+      Number.isFinite(lastErrorNotifiedAt) && now.getTime() - lastErrorNotifiedAt < REPEATED_ERROR_ALERT_INTERVAL_MS;
+    const shouldNotify = lastErrorFingerprint !== errorFingerprint || !recentlyNotified;
 
     await writeAlertState(alertStatePath, {
       initializedAt: previousState?.initializedAt || null,
-      lastCheckedAt: new Date().toISOString(),
+      lastCheckedAt: now.toISOString(),
       lastSyncedAt: previousState?.lastSyncedAt || null,
       lastError: message,
+      lastErrorNotifiedAt: shouldNotify
+        ? now.toISOString()
+        : previousState?.lastErrorNotifiedAt || null,
       seenKeys: Array.isArray(previousState?.seenKeys)
         ? previousState.seenKeys.slice(0, MAX_STORED_KEYS)
         : []
     });
 
-    if (lastErrorFingerprint === errorFingerprint) {
+    if (!shouldNotify) {
       process.stdout.write("NO_REPLY\n");
       return;
     }

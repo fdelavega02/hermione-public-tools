@@ -8,6 +8,7 @@
   "captureHtml": true,
   "captureScreenshots": true,
   "defaultTimeoutMs": 45000,
+  "authAutoSaveTimeoutMs": 600000,
   "viewport": {
     "width": 1440,
     "height": 1100

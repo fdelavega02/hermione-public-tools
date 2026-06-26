@@ -26,6 +26,12 @@ Small helper scripts for managing OpenClaw from the local machine.
 ### `mail/outlook-local/`
 Local Outlook automation tools. These scripts support browser-based Outlook processes, inbox syncing, alert checks, and reply drafting while keeping account state and credentials local.
 
+Current Outlook-local highlights:
+
+- Manual auth can reuse existing local browser state and optionally auto-save after Outlook Mail is ready.
+- Alert checks suppress repeated identical failures briefly, but resurface persistent sync/auth problems once per day instead of going quiet forever.
+- Recovery docs stay generic: no saved auth state, mailbox content, screenshots, private filter terms, local paths, or account details belong in the public repo.
+
 ## Privacy Boundaries
 
 This repo intentionally excludes private or generated data, including:

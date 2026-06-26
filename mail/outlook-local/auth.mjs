@@ -42,6 +42,8 @@ async function main() {
   const metaPath = path.join(path.dirname(statePath), "auth-meta.json");
   const loginUrl = config.loginUrl || "https://outlook.office.com/mail/";
   const readySelector = config.selectors?.postLoginReady;
+  const autoSave = process.argv.includes("--auto-save");
+  const autoSaveTimeoutMs = config.authAutoSaveTimeoutMs || 10 * 60 * 1000;
 
   await ensureParentDir(statePath);
 
@@ -50,16 +52,35 @@ async function main() {
   console.log("Complete sign-in and MFA only in the browser window that opens on this machine.");
 
   const browser = await chromium.launch({ headless: false });
-  const context = await browser.newContext();
+  const contextOptions = (await exists(statePath)) ? { storageState: statePath } : {};
+  const context = await browser.newContext(contextOptions);
   const page = await context.newPage();
 
   await page.goto(loginUrl, { waitUntil: "domcontentloaded" });
 
-  const rl = createInterface({ input, output });
-  await rl.question(
-    "\nAfter Outlook is fully signed in and your mailbox is visible, press Enter here to save local session state..."
-  );
-  rl.close();
+  if (autoSave) {
+    if (!readySelector) {
+      throw new Error("Auto-save auth requires selectors.postLoginReady in config.json.");
+    }
+
+    console.log(`Waiting up to ${Math.round(autoSaveTimeoutMs / 1000)}s for Outlook to finish signing in...`);
+    await page.waitForFunction(
+      (selector) => {
+        const outlookHost = window.location.hostname === "outlook.office.com"
+          || window.location.hostname === "outlook.cloud.microsoft";
+        const outlookMailPath = /^\/mail\/?/i.test(window.location.pathname);
+        return outlookHost && outlookMailPath && Boolean(document.querySelector(selector));
+      },
+      readySelector,
+      { timeout: autoSaveTimeoutMs }
+    );
+  } else {
+    const rl = createInterface({ input, output });
+    await rl.question(
+      "\nAfter Outlook is fully signed in and your mailbox is visible, press Enter here to save local session state..."
+    );
+    rl.close();
+  }
 
   if (readySelector) {
     try {
