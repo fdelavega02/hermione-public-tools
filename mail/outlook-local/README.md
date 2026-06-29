@@ -83,7 +83,7 @@ For scheduled or recovery workflows where Outlook should save automatically afte
 npm run auth -- --auto-save
 ```
 
-Auto-save waits for `selectors.postLoginReady`, confirms the page is an Outlook Mail page, then writes the refreshed local storage state. Tune `authAutoSaveTimeoutMs` in `config.json` if your tenant or MFA flow needs longer.
+Auto-save waits for `selectors.postLoginReady`, confirms the page is an Outlook Mail page, then writes the refreshed local storage state. Add `authAutoSaveTimeoutMs` to `config.json` if your tenant or MFA flow needs longer than the default 10 minutes.
 
 If the saved session expires later, rerun `npm run auth`. Keep storage state, auth metadata, screenshots, and account-specific recovery notes local only.
 
