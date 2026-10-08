@@ -23,6 +23,13 @@ The goal is practical usefulness without being invasive.
 ### `scripts/`
 Small helper scripts for managing OpenClaw from the local machine.
 
+Current script highlight:
+
+- `validate_daily_candidates.py` checks two dated daily-project handoffs for a
+  concrete, sourced, non-recycled candidate. It is read-only by default and
+  accepts the handoff paths explicitly; optional local audit history is ignored
+  by Git. See [`scripts/README.md`](scripts/README.md) for usage.
+
 ### `mail/outlook-local/`
 Local Outlook automation tools. These scripts support browser-based Outlook processes, inbox syncing, alert checks, and reply drafting while keeping account state and credentials local.
 
