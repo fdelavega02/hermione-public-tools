@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate two weekday daily-project handoffs.
+"""Validate the three weekday daily-project handoffs.
 
 This is intentionally local-only.  It reads the durable handoff artifacts and,
 when asked, appends accepted candidate fingerprints to a local audit file.  It
@@ -20,6 +20,10 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 HISTORY_PATH = ROOT / "state" / "daily-candidate-provenance.json"
+HANDOFFS = {
+    "Hermy": Path("/home/fdelavega02/.openclaw/workspace-twin/memory/dashboard-handoff.md"),
+    "Herms": Path("/home/fdelavega02/.openclaw/workspace-twitch/memory/dashboard-handoff.md"),
+}
 FORBIDDEN = re.compile(
     r"\b(blocker|no[- ]candidate|quiet status|maintenance|dream artifact|generic support|recycled|stale)\b",
     re.IGNORECASE,
@@ -96,10 +100,8 @@ def validate(agent: str, path: Path, expected_date: str, history: list[dict[str,
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Validate two daily-project handoffs.")
+    parser = argparse.ArgumentParser(description="Validate Hermy and Herms daily project handoffs.")
     parser.add_argument("--date", default=date.today().isoformat(), help="expected handoff date (YYYY-MM-DD)")
-    parser.add_argument("--first-handoff", required=True, type=Path, help="path to the first handoff artifact")
-    parser.add_argument("--second-handoff", required=True, type=Path, help="path to the second handoff artifact")
     parser.add_argument("--record", action="store_true", help="append successful results to the local audit history")
     parser.add_argument("--json", action="store_true", help="emit the complete report as JSON")
     args = parser.parse_args()
@@ -111,8 +113,7 @@ def main() -> int:
         print(f"ERROR: {exc}", file=sys.stderr)
         return 2
 
-    handoffs = {"Handoff A": args.first_handoff, "Handoff B": args.second_handoff}
-    results = [validate(agent, path, args.date, history) for agent, path in handoffs.items()]
+    results = [validate(agent, path, args.date, history) for agent, path in HANDOFFS.items()]
     report = {"date": args.date, "ok": all(item["ok"] for item in results), "results": results}
 
     if args.record and report["ok"]:
